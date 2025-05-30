@@ -6,9 +6,12 @@ import { useHandlerProducts } from "@/hooks";
 import { ProductsList } from "@/components/ProductsList/ProductList";
 import { FormAddProduct } from "@/components/Forms/FormAddProduct";
 import { AddButton } from "@/components/AddButton/AddButton";
+import { FormAddProductToStore } from "@/components/Forms/FormAddProductToStore";
+import { useHandlerPrices } from "@/hooks/useHandlePrices";
 
 export default function ProductsPage() {
   const { loading, error, createProduct } = useHandlerProducts();
+  const { createPrice } = useHandlerPrices();
 
   if (error) {
     return <h1>HUBO UN ERROR..</h1>;
@@ -19,7 +22,10 @@ export default function ProductsPage() {
       {!loading ? (
         <>
           <ProductsList />
-          <AddButton title="Create New Product">
+          <AddButton
+            doubleModal={<FormAddProductToStore onSubmit={createPrice} />}
+            title="Create New Product"
+          >
             <FormAddProduct onSubit={createProduct} />
           </AddButton>
         </>

@@ -6,6 +6,8 @@ export function useHandlerPrices() {
   const {
     prices,
     setPrices,
+    allPrices,
+    setAllPrices,
     product,
     setProduct,
     searchedPrices,
@@ -16,11 +18,14 @@ export function useHandlerPrices() {
     createPrice,
     deletePrice,
     updatePrice,
+    getAllPrices,
   } = React.useContext(HandlePricesContext);
 
   return {
     prices,
     setPrices,
+    allPrices,
+    setAllPrices,
     product,
     setProduct,
     searchedPrices,
@@ -31,5 +36,6 @@ export function useHandlerPrices() {
     createPrice,
     deletePrice,
     updatePrice,
+    getAllPrices,
   };
 }
