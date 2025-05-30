@@ -4,7 +4,7 @@
 import React from "react";
 import toast from "react-hot-toast";
 
-import { Product, Store } from "@/model";
+import { Store } from "@/model";
 import { useHandleOpenModal } from "@/hooks";
 
 // Tipado del contexto
@@ -112,15 +112,15 @@ export function HandleStoresProvider({ children }: Props) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      toast.success("Product successfully created!");
+      toast.success("Store successfully created!");
 
       setTimeout(() => {
         refetchStores();
       }, 1000);
       onClose();
     } catch (error) {
-      console.error("❌ Error al crear el producto:", error);
-      toast.error("Error creating product");
+      console.error("❌ Error al crear el tienda:", error);
+      toast.error("Error creating store");
       throw error;
     }
   };
@@ -142,14 +142,14 @@ export function HandleStoresProvider({ children }: Props) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      toast.success("Product successfully deleted!");
+      toast.success("Store successfully deleted!");
 
       setTimeout(() => {
         refetchStores();
       }, 1000);
     } catch (error) {
-      console.error("❌ Error al eliminar el producto:", error);
-      toast.error("Error deleting product");
+      console.error("❌ Error al eliminar la tienda:", error);
+      toast.error("Error deleting Store");
       throw error;
     }
   };
@@ -182,7 +182,7 @@ export function HandleStoresProvider({ children }: Props) {
 
       // Success toast message dynamically based on the new status
       toast.success(
-        `Product successfully ${newActiveStatus ? "activated" : "deactivated"}!`,
+        `Store successfully ${newActiveStatus ? "activated" : "deactivated"}!`,
       );
 
       setTimeout(() => {
@@ -191,8 +191,8 @@ export function HandleStoresProvider({ children }: Props) {
       // If you have a modal or drawer that needs to close after update, call onClose() here.
       // onClose();
     } catch (error) {
-      console.error("❌ Error al actualizar el estado del producto:", error);
-      toast.error("Error updating product status");
+      console.error("❌ Error al actualizar el estado del Tienda:", error);
+      toast.error("Error updating store status");
       throw error;
     }
   };
