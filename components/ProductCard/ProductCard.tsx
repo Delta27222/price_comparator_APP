@@ -53,7 +53,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               </p>
             </div>
             {"->"}
-            <p> {product.shortestPriceStoreName}</p>
+            <p className="truncate">{product.shortestPriceStoreName}</p>
           </div>
         ) : (
           <div className="flex justify-center items-center">
