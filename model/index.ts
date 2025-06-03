@@ -6,6 +6,8 @@ export interface Product {
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
+  shortestPrice?: string;
+  shortestPriceStoreName?: string;
 }
 
 export interface Store {

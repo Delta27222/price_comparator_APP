@@ -8,6 +8,7 @@ import { FormAddProduct } from "@/components/Forms/FormAddProduct";
 import { AddButton } from "@/components/AddButton/AddButton";
 import { FormAddProductToStore } from "@/components/Forms/FormAddProductToStore";
 import { useHandlerPrices } from "@/hooks/useHandlePrices";
+import { SearchBar } from "@/components/SearchBar/SearchBar";
 
 export default function ProductsPage() {
   const { loading, error, createProduct } = useHandlerProducts();
@@ -21,6 +22,9 @@ export default function ProductsPage() {
     <>
       {!loading ? (
         <>
+          <div className="md:hidden mb-5">
+            <SearchBar />
+          </div>
           <ProductsList />
           <AddButton
             doubleModal={<FormAddProductToStore onSubmit={createPrice} />}

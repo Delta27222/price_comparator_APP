@@ -42,7 +42,26 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         <h3 className="text-lg font-bold text-gray-900 dark:text-white leading-tight truncate">
           {description}
         </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400">12 Tracks</p>
+        {/* Mejor precio section */}
+        {product.shortestPrice ? (
+          <div className="flex flex-row justify-center items-center origin-center gap-2 ">
+            <div className="w-20 backdrop-blur-sm bg-white/60 dark:bg-neutral-800/60 px-2 py-1 rounded-full shadow-md">
+              <p className="text-sm font-semibold text-red-700 dark:text-red-300">
+                {Number(product.shortestPrice) > 1
+                  ? `$${Number(product.shortestPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                  : `$${Number(product.shortestPrice).toFixed(2)}`}
+              </p>
+            </div>
+            {"->"}
+            <p> {product.shortestPriceStoreName}</p>
+          </div>
+        ) : (
+          <div className="flex justify-center items-center">
+            <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+              Aún sin precio
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="mt-4 ">
