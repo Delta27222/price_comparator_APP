@@ -48,7 +48,7 @@ export const FormAddProductToStore = ({
       onSubmit(dataToSend);
     } else {
       console.warn(
-        "Please select all required fields (Product, Store) and enter an Amount.",
+        "Please select all required fields (Product, Store) and enter an Amount."
       );
     }
   };
@@ -68,12 +68,12 @@ export const FormAddProductToStore = ({
     const assignedStoreIdsForSelectedProduct = new Set(
       allPrices
         .filter((price) => price.productId === productId)
-        .map((price) => price.storeId),
+        .map((price) => price.storeId)
     );
 
     // Filter the 'stores' list: keep only stores whose ID is NOT in the set
     const storesNotAssignedToSelectedProduct = stores.filter(
-      (store) => !assignedStoreIdsForSelectedProduct.has(store.id),
+      (store) => !assignedStoreIdsForSelectedProduct.has(store.id)
     );
 
     return storesNotAssignedToSelectedProduct.map((store) => ({
@@ -134,7 +134,9 @@ export const FormAddProductToStore = ({
         isDisabled={!dataToSend.productId}
         items={MemoizedStores}
         label="Select Store"
-        placeholder={dataToSend.productId ? "Choose a store" : "Select a product first"}
+        placeholder={
+          dataToSend.productId ? "Choose a store" : "Select a product first"
+        }
         onSelectionChange={(keys) => {
           const selectedKey = Array.from(keys)[0] as string;
 
