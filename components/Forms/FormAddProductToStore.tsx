@@ -17,9 +17,11 @@ interface DataToSend {
 
 interface FormAddProductToStoreProps {
   onSubmit: (data: DataToSend) => void;
+  loading: boolean;
 }
 
 export const FormAddProductToStore = ({
+  loading,
   onSubmit,
 }: FormAddProductToStoreProps) => {
   const { products } = useHandlerProducts();
@@ -48,7 +50,7 @@ export const FormAddProductToStore = ({
       onSubmit(dataToSend);
     } else {
       console.warn(
-        "Please select all required fields (Product, Store) and enter an Amount."
+        "Please select all required fields (Product, Store) and enter an Amount.",
       );
     }
   };
@@ -68,12 +70,12 @@ export const FormAddProductToStore = ({
     const assignedStoreIdsForSelectedProduct = new Set(
       allPrices
         .filter((price) => price.productId === productId)
-        .map((price) => price.storeId)
+        .map((price) => price.storeId),
     );
 
     // Filter the 'stores' list: keep only stores whose ID is NOT in the set
     const storesNotAssignedToSelectedProduct = stores.filter(
-      (store) => !assignedStoreIdsForSelectedProduct.has(store.id)
+      (store) => !assignedStoreIdsForSelectedProduct.has(store.id),
     );
 
     return storesNotAssignedToSelectedProduct.map((store) => ({
@@ -154,8 +156,13 @@ export const FormAddProductToStore = ({
         {(store) => <SelectItem key={store.id}>{store.name}</SelectItem>}
       </Select>
 
-      <Button className="w-full" color="success" type="submit">
-        Add Product
+      <Button
+        className="w-full"
+        color="success"
+        disabled={loading}
+        type="submit"
+      >
+        {loading ? "Adding..." : "Add Product to Store"}
       </Button>
     </Form>
   );

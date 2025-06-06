@@ -11,8 +11,9 @@ import { useHandlerPrices } from "@/hooks/useHandlePrices";
 import { SearchBar } from "@/components/SearchBar/SearchBar";
 
 export default function ProductsPage() {
-  const { loading, loadingCreation, error, createProduct } = useHandlerProducts();
-  const { createPrice } = useHandlerPrices();
+  const { loading, loadingCreation, error, createProduct } =
+    useHandlerProducts();
+  const { createPrice, loadingCreating } = useHandlerPrices();
 
   if (error) {
     return <h1>HUBO UN ERROR..</h1>;
@@ -27,7 +28,12 @@ export default function ProductsPage() {
           </div>
           <ProductsList />
           <AddButton
-            doubleModal={<FormAddProductToStore onSubmit={createPrice} />}
+            doubleModal={
+              <FormAddProductToStore
+                loading={loadingCreating}
+                onSubmit={createPrice}
+              />
+            }
             title="Create New Product"
           >
             <FormAddProduct loading={loadingCreation} onSubit={createProduct} />

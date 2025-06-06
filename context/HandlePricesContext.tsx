@@ -18,6 +18,7 @@ export type THandlePricesContext = {
   searchedPrices: Price[];
   setSearchedPrices: React.Dispatch<React.SetStateAction<Price[]>>;
   loading: boolean;
+  loadingCreating: boolean;
   error: string | null;
   filterPricesByText: (query: string) => void;
   createPrice: (data: any) => void;
@@ -36,6 +37,7 @@ export const HandlePricesContext = React.createContext<THandlePricesContext>({
   searchedPrices: [],
   setSearchedPrices: () => {},
   loading: false,
+  loadingCreating: false,
   error: null,
   filterPricesByText: () => {},
   createPrice: () => {},
@@ -58,6 +60,7 @@ export function HandlePricesProvider({ children }: Props) {
   const [product, setProduct] = React.useState<Product | null>(null);
   const [searchedPrices, setSearchedPrices] = React.useState<Price[]>([]);
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [loadingCreating, setLoadingCreating] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
@@ -68,7 +71,7 @@ export function HandlePricesProvider({ children }: Props) {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/prices/product/${productId}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/prices/product/${productId}`,
       );
 
       if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
@@ -110,7 +113,7 @@ export function HandlePricesProvider({ children }: Props) {
     const result = prices.filter(
       (price) =>
         price.product?.name.toLowerCase().includes(normalized) ||
-        price.store?.name.toLowerCase().includes(normalized)
+        price.store?.name.toLowerCase().includes(normalized),
     );
 
     setSearchedPrices(result);
@@ -118,6 +121,7 @@ export function HandlePricesProvider({ children }: Props) {
 
   const createPrice = async (data: any) => {
     try {
+      setLoadingCreating(true);
       const dataToSend = {
         ...data,
         amount: parseFloat(data.amount),
@@ -129,7 +133,7 @@ export function HandlePricesProvider({ children }: Props) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dataToSend),
-        }
+        },
       );
 
       if (!response.ok) throw new Error("Failed to create price");
@@ -140,6 +144,8 @@ export function HandlePricesProvider({ children }: Props) {
     } catch (error) {
       console.error("❌ Error creating price:", error);
       toast.error("Error creating price");
+    } finally {
+      setLoadingCreating(false);
     }
   };
 
@@ -151,7 +157,7 @@ export function HandlePricesProvider({ children }: Props) {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({}),
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Failed to delete price");
@@ -172,7 +178,7 @@ export function HandlePricesProvider({ children }: Props) {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Failed to update price");
@@ -196,6 +202,7 @@ export function HandlePricesProvider({ children }: Props) {
       searchedPrices,
       setSearchedPrices,
       loading,
+      loadingCreating,
       error,
       filterPricesByText,
       createPrice,
@@ -203,7 +210,7 @@ export function HandlePricesProvider({ children }: Props) {
       updatePrice,
       getAllPrices,
     }),
-    [prices, searchedPrices, loading, error, product]
+    [prices, searchedPrices, loading, error, product],
   );
 
   return (

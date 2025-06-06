@@ -21,7 +21,7 @@ export const AddButton = ({ title, doubleModal, children }: AddButtonProp) => {
   const opendSecondModal = () => {
     onOpen();
     setRenderComponent(doubleModal);
-    setTitleComponent("Add Product to Store");
+    setTitleComponent("Add new price to product");
   };
 
   const opendFirstModal = () => {
