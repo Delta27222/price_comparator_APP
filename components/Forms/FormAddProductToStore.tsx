@@ -83,7 +83,10 @@ export const FormAddProductToStore = ({
   }, [stores, allPrices, dataToSend.productId]);
 
   const MemoizedProducts = React.useMemo(() => {
-    return products.map((product) => ({ id: product.id, name: product.name }));
+    return products
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((product) => ({ id: product.id, name: product.name }));
   }, [products]);
 
   return (

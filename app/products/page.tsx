@@ -30,7 +30,7 @@ export default function ProductsPage() {
             doubleModal={<FormAddProductToStore onSubmit={createPrice} />}
             title="Create New Product"
           >
-            <FormAddProduct onSubit={createProduct} />
+            <FormAddProduct loading={loading} onSubit={createProduct} />
           </AddButton>
         </>
       ) : (

@@ -15,11 +15,13 @@ interface ProductData {
   image: string | null;
   [key: string]: FormDataEntryValue | string | null;
 }
+
 interface FormAddProduct {
   onSubit(data: Partial<ProductData>): void;
+  loading: boolean;
 }
 
-export const FormAddProduct = ({ onSubit }: FormAddProduct) => {
+export const FormAddProduct = ({ onSubit, loading }: FormAddProduct) => {
   const [cameraStream, setCameraStream] = React.useState<MediaStream | null>(
     null,
   );
@@ -53,13 +55,37 @@ export const FormAddProduct = ({ onSubit }: FormAddProduct) => {
     } else {
       const imageFile = fileInputRef.current?.files?.[0];
 
-      data.image = imageFile ? imageFile.name : null;
-    }
+      if (imageFile) {
+        const reader = new FileReader();
 
-    if (data.name && data.description !== undefined) {
-      onSubit(data);
-    } else {
-      console.error("Please fill in all required fields.");
+        reader.onloadend = () => {
+          // Convertir la imagen cargada a base64 con menor calidad (60%)
+          const image = new Image();
+
+          image.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            if (ctx) {
+              // Ajustar el tamaño del canvas según la imagen
+              canvas.width = image.width;
+              canvas.height = image.height;
+              ctx.drawImage(image, 0, 0, image.width, image.height);
+
+              // Guardar la imagen como base64 con calidad reducida (0.6)
+              const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
+
+              data.image = dataUrl; // Establecer la imagen en base64
+              onSubit(data); // Llamar a la función de submit con el base64
+            }
+          };
+          image.src = reader.result as string;
+        };
+
+        reader.readAsDataURL(imageFile); // Leer el archivo como base64
+      } else {
+        console.error("No image selected");
+      }
     }
   };
 
@@ -70,7 +96,9 @@ export const FormAddProduct = ({ onSubit }: FormAddProduct) => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: {
+            facingMode: "environment", // Forzar la cámara trasera
+          },
         });
 
         setCameraStream(stream);
@@ -102,12 +130,30 @@ export const FormAddProduct = ({ onSubit }: FormAddProduct) => {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageDataUrl = canvas.toDataURL("image/png");
 
-        setCapturedImage(imageDataUrl);
-        setShowCapturedPreview(true);
+        // Reducir la calidad de la imagen capturada
+        const img = new Image();
 
-        setTimeout(() => {
-          setShowCapturedPreview(false);
-        }, 3000);
+        img.onload = () => {
+          const canvas2 = document.createElement("canvas");
+          const ctx2 = canvas2.getContext("2d");
+
+          if (ctx2) {
+            canvas2.width = img.width;
+            canvas2.height = img.height;
+            ctx2.drawImage(img, 0, 0, img.width, img.height);
+
+            // Convertir a base64 con calidad reducida
+            const reducedQuality = canvas2.toDataURL("image/jpeg", 0.6);
+
+            setCapturedImage(reducedQuality);
+            setShowCapturedPreview(true);
+
+            setTimeout(() => {
+              setShowCapturedPreview(false);
+            }, 3000);
+          }
+        };
+        img.src = imageDataUrl; // Establecer el source de la imagen
 
         if (cameraStream) {
           cameraStream.getTracks().forEach((track) => track.stop());
@@ -259,8 +305,13 @@ export const FormAddProduct = ({ onSubit }: FormAddProduct) => {
         )}
       </div>
 
-      <Button className="w-full" color="success" type="submit">
-        Add Product
+      <Button
+        className="w-full"
+        color="success"
+        disabled={loading}
+        type="submit"
+      >
+        {loading ? "Creating..." : "Create Product"}
       </Button>
     </Form>
   );

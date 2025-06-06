@@ -35,7 +35,7 @@ export const AddButton = ({ title, doubleModal, children }: AddButtonProp) => {
       {doubleModal ? (
         <Button
           isIconOnly
-          aria-label="Agregar producto"
+          aria-label="Add price to product"
           className="hover:scale-105"
           color="success"
           radius="full"
@@ -48,7 +48,7 @@ export const AddButton = ({ title, doubleModal, children }: AddButtonProp) => {
       ) : null}
       <Button
         isIconOnly
-        aria-label="Agregar producto"
+        aria-label="Add product"
         className="hover:scale-105"
         color="success"
         radius="full"

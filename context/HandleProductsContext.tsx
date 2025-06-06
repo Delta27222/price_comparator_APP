@@ -90,6 +90,7 @@ export function HandleProductsProvider({ children }: Props) {
 
   const createProduct = async (data: any) => {
     try {
+      setLoading(true);
       const dataProduct = {
         ...data,
         price: 1,
@@ -121,6 +122,8 @@ export function HandleProductsProvider({ children }: Props) {
       console.error("❌ Error al crear el producto:", error);
       toast.error("Error creating product");
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
