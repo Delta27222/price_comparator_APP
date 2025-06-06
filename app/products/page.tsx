@@ -11,7 +11,7 @@ import { useHandlerPrices } from "@/hooks/useHandlePrices";
 import { SearchBar } from "@/components/SearchBar/SearchBar";
 
 export default function ProductsPage() {
-  const { loading, error, createProduct } = useHandlerProducts();
+  const { loading, loadingCreation, error, createProduct } = useHandlerProducts();
   const { createPrice } = useHandlerPrices();
 
   if (error) {
@@ -30,7 +30,7 @@ export default function ProductsPage() {
             doubleModal={<FormAddProductToStore onSubmit={createPrice} />}
             title="Create New Product"
           >
-            <FormAddProduct loading={loading} onSubit={createProduct} />
+            <FormAddProduct loading={loadingCreation} onSubit={createProduct} />
           </AddButton>
         </>
       ) : (

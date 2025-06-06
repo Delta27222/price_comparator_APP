@@ -14,6 +14,7 @@ export type THandleProductsContext = {
   searchedProducts: Product[];
   setSearchedProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   loading: boolean;
+  loadingCreation: boolean;
   error: string | null;
   filterProductsByText: (query: string) => void;
   createProduct: (data: any) => void;
@@ -30,6 +31,7 @@ export const HandleProductsContext =
     searchedProducts: [],
     setSearchedProducts: () => {},
     loading: false,
+    loadingCreation: false,
     error: null,
     filterProductsByText: () => {},
     createProduct: () => {},
@@ -48,7 +50,8 @@ export function HandleProductsProvider({ children }: Props) {
 
   const [products, setProducts] = React.useState<Product[]>([]);
   const [searchedProducts, setSearchedProducts] = React.useState<Product[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(true);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [loadingCreation, setLoadingCreation] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
@@ -90,7 +93,7 @@ export function HandleProductsProvider({ children }: Props) {
 
   const createProduct = async (data: any) => {
     try {
-      setLoading(true);
+      setLoadingCreation(true);
       const dataProduct = {
         ...data,
         price: 1,
@@ -123,7 +126,7 @@ export function HandleProductsProvider({ children }: Props) {
       toast.error("Error creating product");
       throw error;
     } finally {
-      setLoading(false);
+      setLoadingCreation(false);
     }
   };
 
@@ -255,6 +258,7 @@ export function HandleProductsProvider({ children }: Props) {
       products,
       setProducts,
       loading,
+      loadingCreation,
       error,
       filterProductsByText,
       searchedProducts,
@@ -268,6 +272,7 @@ export function HandleProductsProvider({ children }: Props) {
     [
       products,
       loading,
+      loadingCreation,
       error,
       filterProductsByText,
       searchedProducts,
